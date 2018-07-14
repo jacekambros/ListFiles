@@ -1,4 +1,6 @@
 import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,21 +29,37 @@ public class ListClass {
         File sf; // save file
         String fName;
         String sfName;
-        BufferedImage img;
+        BufferedImage img, newImg;
+
         for (int i = 0; i < numberOfFiles; i++) {
             f = listOfFiles[i];
             fName = f.getName();
             sfName = "Kopia_"+fName;
             if (fName.toUpperCase().endsWith(".JPG")) {
                 System.out.println(listOfFiles[i].getName() + " " + listOfFiles[i].length());
+
+
+
                 try {
+
                     img = ImageIO.read(f);
+                    sf = new File("F:\\Zdjęcia\\test\\" + sfName);
+
+                    newImg = new BufferedImage(100,75, BufferedImage.TYPE_INT_RGB);
+                    Graphics2D g = newImg.createGraphics();
+//                    AffineTransform at = AffineTransform.getScaleInstance(
+//                            (double) 100/img.getWidth(), (double) 75/img.getHeight());
+//                    g.drawRenderedImage(img, at);
+                    g.drawImage(img, 0,0, 100, 75, null);
+                    g.dispose();
+
+                    ImageIO.write(newImg, "jpg", sf);
+
+
                     System.out.println("Width : " + img.getWidth());
                     System.out.println("Height: " + img.getHeight());
                     System.out.println();
-                    sf = new File("F:\\Zdjęcia\\test\\" + sfName);
-                    ImageIO.write(img, "jpg", sf);
-                } catch (IOException e) {
+                    } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
