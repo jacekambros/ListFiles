@@ -19,8 +19,12 @@ public class ListClass {
             System.exit(1);
         }
 
+        File f;
+        String fName;
         for (int i = 0; i < numberOfFiles; i++) {
-            if (listOfFiles[i].isFile()) {
+            f = listOfFiles[i];
+            fName = f.getName();
+            if (fName.toUpperCase().endsWith(".JPG")) {
                 System.out.println(listOfFiles[i].getName() + " " + listOfFiles[i].length());
             }
         }
