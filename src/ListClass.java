@@ -1,4 +1,8 @@
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 
 public class ListClass {
     private static String dirPath = "";
@@ -21,11 +25,20 @@ public class ListClass {
 
         File f;
         String fName;
+        BufferedImage img;
         for (int i = 0; i < numberOfFiles; i++) {
             f = listOfFiles[i];
             fName = f.getName();
             if (fName.toUpperCase().endsWith(".JPG")) {
                 System.out.println(listOfFiles[i].getName() + " " + listOfFiles[i].length());
+                try {
+                    img = ImageIO.read(f);
+                    System.out.println("Width : " + img.getWidth());
+                    System.out.println("Height: " + img.getHeight());
+                    System.out.println();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
    }
