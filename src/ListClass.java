@@ -24,11 +24,14 @@ public class ListClass {
         }
 
         File f;
+        File sf; // save file
         String fName;
+        String sfName;
         BufferedImage img;
         for (int i = 0; i < numberOfFiles; i++) {
             f = listOfFiles[i];
             fName = f.getName();
+            sfName = "Kopia_"+fName;
             if (fName.toUpperCase().endsWith(".JPG")) {
                 System.out.println(listOfFiles[i].getName() + " " + listOfFiles[i].length());
                 try {
@@ -36,6 +39,8 @@ public class ListClass {
                     System.out.println("Width : " + img.getWidth());
                     System.out.println("Height: " + img.getHeight());
                     System.out.println();
+                    sf = new File("F:\\Zdjęcia\\test\\" + sfName);
+                    ImageIO.write(img, "jpg", sf);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
