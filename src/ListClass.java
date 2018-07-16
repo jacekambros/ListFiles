@@ -1,20 +1,21 @@
+// https://www.mkyong.com/java/how-to-resize-an-image-in-java/
+
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 
 public class ListClass {
-    private static String dirPath = "";
+    private static final String SOURCE_PATH = "F:\\Zdjęcia\\Zdjęcia 2018.06.10-2018.06.15\\";
+    private static final String DESTINATION_PATH = "F:\\Zdjęcia\\Miniatury\\";
+    private static final int IMG_WIDTH = 150;
 
     public static void main(String[] args) {
-        dirPath = "F:\\Zdjęcia\\Zdjęcia 2018.06.10-2018.06.15";
+        String sourcePath = SOURCE_PATH;
+        String destinationPath = DESTINATION_PATH;
 
-        File folder = new File(dirPath);
-
-        File[] listOfFiles = folder.listFiles();
+        File[] listOfFiles = (new File(sourcePath)).listFiles();
 
         int numberOfFiles = 0;
 
@@ -25,44 +26,37 @@ public class ListClass {
             System.exit(1);
         }
 
-        File f;
-        File sf; // save file
         String fName;
-        String sfName;
-        BufferedImage img, newImg;
+        BufferedImage originalImage, resizedImage;
 
         for (int i = 0; i < numberOfFiles; i++) {
-            f = listOfFiles[i];
-            fName = f.getName();
-            sfName = "Kopia_"+fName;
+            fName = listOfFiles[i].getName();
             if (fName.toUpperCase().endsWith(".JPG")) {
-                System.out.println(listOfFiles[i].getName() + " " + listOfFiles[i].length());
-
-
+                System.out.println("Processed " + fName);
 
                 try {
+                    originalImage = ImageIO.read(new File(sourcePath+fName));
+                    int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
+                    resizedImage = resizeImage(originalImage, type);
+                    ImageIO.write(resizedImage, "png", new File(destinationPath + "min_" + fName + ".png"));
 
-                    img = ImageIO.read(f);
-                    sf = new File("F:\\Zdjęcia\\test\\" + sfName);
-
-                    newImg = new BufferedImage(100,75, BufferedImage.TYPE_INT_RGB);
-                    Graphics2D g = newImg.createGraphics();
-//                    AffineTransform at = AffineTransform.getScaleInstance(
-//                            (double) 100/img.getWidth(), (double) 75/img.getHeight());
-//                    g.drawRenderedImage(img, at);
-                    g.drawImage(img, 0,0, 100, 75, null);
-                    g.dispose();
-
-                    ImageIO.write(newImg, "jpg", sf);
-
-
-                    System.out.println("Width : " + img.getWidth());
-                    System.out.println("Height: " + img.getHeight());
-                    System.out.println();
-                    } catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
+   }
+
+   private static BufferedImage resizeImage(BufferedImage originalImage, int type){
+        int imgWidth = IMG_WIDTH;
+        int imgHeight = originalImage.getHeight()*imgWidth/originalImage.getWidth();
+
+        BufferedImage resizedImage = new BufferedImage(imgWidth, imgHeight, type);
+        Graphics2D graphics2D = resizedImage.createGraphics();
+        graphics2D.drawImage(originalImage, 0,0, imgWidth, imgHeight, null);
+        graphics2D.dispose();
+
+        return resizedImage;
+
    }
 }
